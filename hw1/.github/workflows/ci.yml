@@ -1,0 +1,32 @@
+# CI для hw-1: сборка + ctest на матрице компиляторов и конфигураций.
+# Зелёные все четыре джоба — задание сдано.
+name: CI
+
+on: [push, pull_request]   # каждый push в любую ветку и каждый pull request
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.compiler }} / ${{ matrix.build-type }}
+    runs-on: ubuntu-latest
+    strategy:
+      # Показываем результаты всей матрицы, а не останавливаемся
+      # на первом провале.
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]        # оба предустановлены на ubuntu-latest
+        build-type: [Debug, Release]
+    env:
+      # CMake выбирает компилятор по переменной окружения CC.
+      CC: ${{ matrix.compiler }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure

@@ -1,0 +1,14 @@
+# Каталоги сборки CMake
+build/
+build-*/
+
+# Артефакты компиляции
+*.o
+*.a
+*.so
+
+# IDE и вспомогательные файлы
+.idea/
+.vscode/
+compile_commands.json
+.cache/
