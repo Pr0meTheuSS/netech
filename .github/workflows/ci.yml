@@ -38,6 +38,12 @@ jobs:
   sanitizers:
     name: gcc / ASan + UBSan + LeakSan
     runs-on: ubuntu-latest
+    strategy:
+      # Показываем результаты всей матрицы, а не останавливаемся
+      # на первом провале.
+      fail-fast: false
+      matrix:
+        dir: [hw1]
     env:
       CC: gcc
       # LeakSanitizer на Linux входит в состав ASan; поиск утечек включаем
@@ -64,6 +70,12 @@ jobs:
   valgrind:
     name: gcc / valgrind memcheck
     runs-on: ubuntu-latest
+    strategy:
+      # Показываем результаты всей матрицы, а не останавливаемся
+      # на первом провале.
+      fail-fast: false
+      matrix:
+        dir: [hw1]
     env:
       CC: gcc
     steps:
